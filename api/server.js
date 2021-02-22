@@ -4,6 +4,9 @@ const cors = require('cors');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 
+const usersRouter = require('./users/users-router.js');
+const authRouter = require('./auth/auth-router.js');
+
 const server = express();
 
 const config = {
@@ -31,8 +34,15 @@ server.use(helmet());
 server.use(express.json());
 server.use(cors());
 
+server.use('/api/users', usersRouter);
+server.use('/api/auth', authRouter);
+
 server.get('/', (req, res) => {
   res.json('API up');
+});
+
+server.get('*', (req, res) => {
+  res.json('Not a valid endpoint');
 });
 
 module.exports = server;
